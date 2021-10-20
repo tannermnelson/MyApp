@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.clementsnelson.smoothriders.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <include
         android:id="@+id/myToolbar"
@@ -15,72 +15,62 @@
         />
 
     <TextView
-        android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Smooth Riders!"
+        android:text="Create an account below: "
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2"
-        android:textSize="20dp"/>
+        app:layout_constraintVertical_bias=".2"
+        android:textSize="22dp"
+        android:id="@+id/createText"
+
+        />
 
     <EditText
-        android:id="@+id/emailText"
-        android:layout_width="135dp"
-        android:layout_height="60dp"
+        android:layout_width="123dp"
+        android:layout_height="52dp"
         android:text="Enter Email"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/welcomeText"
-        app:layout_constraintVertical_bias=".2" />
+        app:layout_constraintTop_toBottomOf="@id/createText"
+        app:layout_constraintVertical_bias=".2"
+        android:id="@+id/emailText"/>
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/emailText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0"
+        android:layout_width="158dp"
+        android:layout_height="52dp"
         android:text="Enter Password"
-        android:id="@+id/passwordText"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailText"
+        app:layout_constraintVertical_bias=".0"
+        android:id="@+id/password1"/>
+
+    <EditText
+        android:layout_width="158dp"
+        android:layout_height="52dp"
+        android:text="Re-enter Password"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password1"
+        app:layout_constraintVertical_bias=".0"
+        android:id="@+id/password2"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passwordText"
+        android:text="Create Account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        android:text="LOGIN"
-        android:id="@+id/loginButton"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/password2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        android:text="SIGN UP"
-        android:id="@+id/signUpButton"
-        android:onClick="onSignUpClick"
-         />
-
-
-
-
-
-
+        app:layout_constraintVertical_bias=".05"
+        android:id="@+id/createButton"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
