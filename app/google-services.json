@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "56504722966",
+    "project_id": "smooth-riders-8551c",
+    "storage_bucket": "smooth-riders-8551c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56504722966:android:237900f1c2578958e03737",
+        "android_client_info": {
+          "package_name": "com.clementsnelson.smoothriders"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "56504722966-a0itc8ohildl4mobqmlbskpd99kgh7ds.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-RTWQJO0LOnN4P3tBAj4613bDLwTr318"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "56504722966-a0itc8ohildl4mobqmlbskpd99kgh7ds.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
