@@ -9,7 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.clementsnelson.smoothriders.MainActivity"
+        <activity
+            android:name="com.clementsnelson.smoothriders.ForgotPassword"
+            android:exported="false" />
+        <activity
+            android:name="com.clementsnelson.smoothriders.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.clementsnelson.smoothriders.RegisterUser"
+            android:exported="true" />
+        <activity
+            android:name="com.clementsnelson.smoothriders.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

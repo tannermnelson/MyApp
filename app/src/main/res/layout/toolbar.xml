@@ -10,8 +10,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/logoutButton"
         android:text="LOGOUT"
+        android:textColor="@color/whiteText"
+        android:backgroundTint="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -19,5 +23,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="HELP"
-        android:id="@+id/helpButton"/>
+        android:textColor="@color/whiteText"
+        android:backgroundTint="@color/colorPrimary"
+        android:id="@+id/helpButton"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

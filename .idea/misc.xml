@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/daniel/AndroidProjects/csc315-fall21-term-project-nelson-clemments-final-project/app/src/main/res/layout/activity_forgot_password.xml" value="0.1" />
+        <entry key="..\:/Users/daniel/AndroidProjects/csc315-fall21-term-project-nelson-clemments-final-project/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/daniel/AndroidProjects/csc315-fall21-term-project-nelson-clemments-final-project/app/src/main/res/layout/activity_profile.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/daniel/AndroidProjects/csc315-fall21-term-project-nelson-clemments-final-project/app/src/main/res/layout/activity_register_user.xml" value="0.1" />
+        <entry key="..\:/Users/daniel/AndroidProjects/csc315-fall21-term-project-nelson-clemments-final-project/app/src/main/res/layout/create_account.xml" value="0.4" />
+        <entry key="..\:/Users/daniel/AndroidProjects/csc315-fall21-term-project-nelson-clemments-final-project/app/src/main/res/layout/toolbar.xml" value="0.36666666666666664" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/create_account.xml" value="0.24564102564102563" />
         <entry key="app/src/main/res/layout/toolbar.xml" value="0.24791666666666667" />
