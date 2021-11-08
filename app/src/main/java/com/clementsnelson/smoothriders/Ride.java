@@ -4,19 +4,20 @@ import androidx.annotation.NonNull;
 
 public class Ride {
 
-    public String rideDescription, rideTime, pickupLocation, destinationLocation, rideTip;
+    public String rideDescription, rideTime, pickupLocation, destinationLocation, rideTip, requesterEmail;
 
     public Ride() {
 
     }
 
 
-    public Ride(String rideDescription, String rideTime, String pickupLocation, String destinationLocation, String rideTip) {
+    public Ride(String rideDescription, String rideTime, String pickupLocation, String destinationLocation, String rideTip, String requesterEmail) {
         this.rideDescription = rideDescription;
         this.rideTime = rideTime;
         this.pickupLocation = pickupLocation;
         this.destinationLocation = destinationLocation;
         this.rideTip = rideTip;
+        this.requesterEmail = requesterEmail;
     }
 
     public String getrideDescription(){ return rideDescription;}

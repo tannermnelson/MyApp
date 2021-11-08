@@ -68,6 +68,7 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
         String pickupLocation = editTextPickupLocation.getText().toString().trim();
         String destinationLocation = editTextDestinationLocation.getText().toString().trim();
         String rideTip = editTextRideTip.getText().toString().trim();
+        String requesterEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail().toString().trim();
 
         // Ride request validation
         if (rideDescription.isEmpty()) {
@@ -97,7 +98,7 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
         // If form is valid set the progress bar to visible
         progressBar.setVisibility(View.VISIBLE);
 
-        Ride ride = new Ride(rideDescription, rideTime, pickupLocation, destinationLocation, rideTip);
+        Ride ride = new Ride(rideDescription, rideTime, pickupLocation, destinationLocation, rideTip, requesterEmail);
 
         FirebaseDatabase.getInstance().getReference("request")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
