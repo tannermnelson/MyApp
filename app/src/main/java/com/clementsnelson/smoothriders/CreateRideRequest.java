@@ -16,11 +16,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CreateRideRequest extends AppCompatActivity implements View.OnClickListener {
     private EditText editTextDescription, editTextTime, editTextPickupLocation, editTextDestinationLocation, editTextRideTip;
     private Button createRideRequestBtn;
     private ProgressBar progressBar;
+
+    private FirebaseFirestore mDbb = FirebaseFirestore.getInstance();
 
     private FirebaseAuth mAuth;
 
@@ -95,7 +99,7 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
 
         Ride ride = new Ride(rideDescription, rideTime, pickupLocation, destinationLocation, rideTip);
 
-        FirebaseDatabase.getInstance().getReference("Rides")
+        FirebaseDatabase.getInstance().getReference("request")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .setValue(ride).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -103,7 +107,12 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
 
                 // If ride data is sent to the Firebase database
                 if (task.isSuccessful()) {
-                    Toast.makeText(CreateRideRequest.this, "Ride has been created successfully!", Toast.LENGTH_LONG).show();
+                    mDbb.collection("Rides").add(ride).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            Toast.makeText(CreateRideRequest.this, "Ride has been created successfully!", Toast.LENGTH_LONG).show();
+                        }
+                    });
                     // If ride is created redirect to rides page (NOT SETUP YET)
                     startActivity(new Intent(CreateRideRequest.this, ProfileActivity.class));
                     progressBar.setVisibility(View.GONE);

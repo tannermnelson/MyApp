@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +18,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 
 
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
     private TextView banner, registerUser;
     private EditText editTextFullName, editTextAge,editTextEmail, editTextPassword;
     private ProgressBar progressBar;
+
+    private FirebaseFirestore mDb = FirebaseFirestore.getInstance();
+    private static final String TAG = "User";
 
     private FirebaseAuth mAuth;
 
@@ -49,6 +60,8 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
         // Progress bar obj reference
         progressBar = findViewById(R.id.progressBar);
+
+
 
     }
 
@@ -120,7 +133,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                         if (task.isSuccessful()) {
                             User user = new User(fullName, age, email);
 
-                            FirebaseDatabase.getInstance().getReference("Users")
+                            FirebaseDatabase.getInstance().getReference(TAG)
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -128,7 +141,13 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
                                     // If user data is sent to the Firebase database
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(RegisterUser.this, "User has been registered successfully!", Toast.LENGTH_LONG).show();
+                                        mDb.collection(TAG).add(user).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                Toast.makeText(RegisterUser.this, "User has been registered successfully!", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
                                         // If user is registered take them to login page
                                         startActivity(new Intent(RegisterUser.this, MainActivity.class));
                                         progressBar.setVisibility(View.GONE);
