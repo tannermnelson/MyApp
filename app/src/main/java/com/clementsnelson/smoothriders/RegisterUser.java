@@ -61,8 +61,6 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         // Progress bar obj reference
         progressBar = findViewById(R.id.progressBar);
 
-
-
     }
 
     @Override

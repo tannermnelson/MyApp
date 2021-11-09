@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.smoothriders.R;
@@ -42,6 +43,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayAdapter<Ride> adapter;
     private Button logoutButton, createRideButton, findRideButton, refreshButton;
     private static final String RIDE = "Rides";
+    private ProgressBar progressBar;
 
     private FirebaseFirestore mDbProfile = FirebaseFirestore.getInstance();
 
@@ -72,15 +74,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-
         createRideButton = (Button) findViewById(R.id.createARideButton);
         createRideButton.setOnClickListener(this);
 
         findRideButton = (Button) findViewById(R.id.findARideButton);
         refreshButton = (Button) findViewById(R.id.refreshButton);
 
-
-
+        // Get progress bar reference
+        progressBar = findViewById(R.id.progressBar);
 
         // Get logoutButton obj reference
         logoutButton = (Button) findViewById(R.id.logoutButton);
@@ -89,8 +90,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         findRideButton.setOnClickListener(this);
         refreshButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
-
-
 
         // Get current user obj by searching db by User ID.
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -143,6 +142,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.refreshButton:
+                progressBar.setVisibility(View.VISIBLE);
                 mDbProfile.collection(RIDE)
                         .get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -156,6 +156,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 }
                                 adapter.clear();
                                 adapter.addAll(rides);
+                                progressBar.setVisibility(View.GONE);
                             }
                         });
                 //startActivity(new Intent(this, usersRides.class));
