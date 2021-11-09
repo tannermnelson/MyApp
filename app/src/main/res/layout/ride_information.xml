@@ -14,165 +14,155 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Smooth Riders"
+        android:textSize="50sp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="75dp" />
+
+    <TextView
         android:id="@+id/DriverLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Driver: "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/banner"
+        app:layout_constraintLeft_toLeftOf="@id/banner"
+        android:textSize="20sp"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="15dp"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pickupLabel"
-        android:text="Pickup Location: "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/DriverLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/destinationLabel"
-        android:text="Destination: "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pickupLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rideDescriptionLabel"
-        android:text="Description: "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/destinationLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timeLabel"
-        android:text="Time: "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rideDescriptionLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tipLabel"
-        android:text="Tip: "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timeLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/acceptButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".8"
-        android:text="ACCEPT RIDE"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/DriverName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/DriverLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/pickupAddress"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/DriverLabel"
-        app:layout_constraintStart_toEndOf="@id/pickupLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
+        app:layout_constraintLeft_toLeftOf="@id/DriverLabel"
+        android:layout_marginLeft="30dp"
+        android:textSize="20sp" />
 
     <TextView
+        android:id="@+id/pickupLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/destination"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Pickup Location: "
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/DriverLabel"
+        app:layout_constraintLeft_toLeftOf="@id/DriverLabel"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/pickupAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/pickupLabel"
-        app:layout_constraintStart_toEndOf="@id/destinationLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
+        app:layout_constraintLeft_toLeftOf="@id/pickupLabel"
+        android:layout_marginLeft="30dp"
+        android:textSize="20sp"/>
 
     <TextView
+        android:id="@+id/destinationLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/rideDescription"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Destination: "
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/pickupLabel"
+        app:layout_constraintLeft_toLeftOf="@id/pickupLabel"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/rideDestination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/destinationLabel"
-        app:layout_constraintStart_toEndOf="@id/rideDescriptionLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
+        app:layout_constraintLeft_toLeftOf="@id/destinationLabel"
+        android:layout_marginLeft="30dp"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/rideDescriptionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description: "
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/destinationLabel"
+        app:layout_constraintLeft_toLeftOf="@id/destinationLabel"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/rideDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rideDescriptionLabel"
+        app:layout_constraintLeft_toLeftOf="@id/rideDescriptionLabel"
+        android:layout_marginLeft="30dp"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/timeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time: "
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/rideDescriptionLabel"
+        app:layout_constraintLeft_toLeftOf="@id/rideDescriptionLabel"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/time"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rideDescription"
-        app:layout_constraintStart_toEndOf="@id/timeLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
+        app:layout_constraintTop_toBottomOf="@id/timeLabel"
+        app:layout_constraintLeft_toLeftOf="@id/timeLabel"
+        android:layout_marginLeft="30dp"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/tipLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tip: "
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/timeLabel"
+        app:layout_constraintLeft_toLeftOf="@id/timeLabel"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tip"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timeLabel"
-        app:layout_constraintStart_toEndOf="@id/tipLabel"
+        app:layout_constraintTop_toBottomOf="@id/tipLabel"
+        app:layout_constraintLeft_toLeftOf="@id/tipLabel"
+        android:layout_marginLeft="30dp"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/acceptButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="ACCEPT RIDE"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:textColor="@color/whiteText"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".1"
-        app:layout_constraintHorizontal_bias=".1"
-        android:textSize="20dp"/>
+        app:layout_constraintLeft_toLeftOf="@id/tipLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tipLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

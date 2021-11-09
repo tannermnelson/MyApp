@@ -63,7 +63,7 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
         tip = (TextView) findViewById(R.id.tip);
         time = (TextView) findViewById(R.id.time);
         pickupAddress = (TextView) findViewById(R.id.pickupAddress);
-        destination = (TextView) findViewById(R.id.destination);
+        destination = (TextView) findViewById(R.id.rideDestination);
 
         // Get logout Button reference
         logoutButton = (Button) findViewById(R.id.logoutButton);
