@@ -1,0 +1,272 @@
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n    <color name=\"colorPrimary\">#E66767</color>\n    <color name=\"colorPrimaryDark\">#303952</color>\n    <color name=\"colorAccent\">#ea8685</color>\n    <color name=\"whiteText\">#FFFFFF</color>\n</resources>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/colors.xml b/app/src/main/res/values/colors.xml
+--- a/app/src/main/res/values/colors.xml	(revision 41c67faa980d8a8204f93f33e24bca7b37de5abe)
++++ b/app/src/main/res/values/colors.xml	(date 1636421019057)
+@@ -4,4 +4,6 @@
+     <color name="colorPrimaryDark">#303952</color>
+     <color name="colorAccent">#ea8685</color>
+     <color name="whiteText">#FFFFFF</color>
++    <color name="blackText">#000000</color>
++
+ </resources>
+Index: app/src/main/java/com/clementsnelson/smoothriders/ProfileActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.clementsnelson.smoothriders;\n\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.AppCompatActivity;\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.View;\nimport android.widget.ArrayAdapter;\nimport android.widget.Button;\nimport android.widget.ListView;\nimport android.widget.TextView;\nimport android.widget.Toast;\nimport com.example.smoothriders.R;\nimport com.google.android.gms.tasks.OnSuccessListener;\nimport com.google.firebase.auth.FirebaseAuth;\nimport com.google.firebase.auth.FirebaseUser;\nimport com.google.firebase.database.DataSnapshot;\nimport com.google.firebase.database.DatabaseError;\nimport com.google.firebase.database.DatabaseReference;\nimport com.google.firebase.database.FirebaseDatabase;\nimport com.google.firebase.database.ValueEventListener;\nimport com.google.firebase.firestore.DocumentReference;\nimport com.google.firebase.firestore.FirebaseFirestore;\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\nimport com.google.firebase.firestore.QuerySnapshot;\n\nimport java.util.ArrayList;\n\npublic class ProfileActivity extends AppCompatActivity implements View.OnClickListener {\n\n    private FirebaseUser user;\n    private DatabaseReference reference;\n    private String userID;\n    private ArrayAdapter<Ride> adapter;\n    private Button logoutButton, createRideButton, findRideButton, myRidesButton, refreshButton;\n\n    private FirebaseFirestore mDbProfile = FirebaseFirestore.getInstance();\n\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_profile);\n\n        ListView rideRequestList = findViewById(R.id.requestList);\n        adapter = new ArrayAdapter<Ride>(\n                this,\n                android.R.layout.simple_list_item_1,\n                new ArrayList<Ride>()\n        );\n\n        rideRequestList.setAdapter(adapter);\n\n        createRideButton = (Button) findViewById(R.id.createARideButton);\n        createRideButton.setOnClickListener(this);\n\n        findRideButton = (Button) findViewById(R.id.findARideButton);\n        myRidesButton = (Button) findViewById(R.id.myRidesButton);\n\n        refreshButton = (Button) findViewById(R.id.refeshButton);\n        refreshButton.setOnClickListener(this);\n\n\n        // Get logoutButton obj reference\n        logoutButton = (Button) findViewById(R.id.logoutButton);\n\n        // Create onClick Listener for logout button\n        findRideButton.setOnClickListener(this);\n        myRidesButton.setOnClickListener(this);\n        logoutButton.setOnClickListener(this);\n\n\n\n        // Get current user obj by searching db by User ID.\n        user = FirebaseAuth.getInstance().getCurrentUser();\n        reference = FirebaseDatabase.getInstance().getReference(\"Users\");\n        userID = user.getUid();\n\n        // Get final obj references to fillable text views\n        final TextView greetingTextView = (TextView) findViewById(R.id.greeting);\n        //final TextView fullNameTextView = (TextView) findViewById(R.id.fullName);\n        //final TextView emailTextView = (TextView) findViewById(R.id.email);\n        //final TextView ageTextView = (TextView) findViewById(R.id.age);\n\n        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {\n            @Override\n            public void onDataChange(@NonNull DataSnapshot snapshot) {\n                // Create User obj\n                User userProfile = snapshot.getValue(User.class);\n\n                if (userProfile != null) { // User profile exists\n                    // Get user information from userProfile\n                    String fullName = userProfile.fullName;\n                    String email = userProfile.email;\n                    String age = userProfile.age;\n\n                    // Set the Text Views to user profile info\n                    greetingTextView.setText(\"Welcome, \" + fullName + \"!\");\n                    //fullNameTextView.setText(fullName);\n                    //emailTextView.setText(email);\n                    //ageTextView.setText(age);\n                }\n            }\n\n            @Override\n            public void onCancelled(@NonNull DatabaseError error) { // User doesn't exist\n                Toast.makeText(ProfileActivity.this, \"Something bad happened!\", Toast.LENGTH_LONG).show();\n            }\n        });\n\n    }\n    @Override\n    public void onClick(View v){\n        switch (v.getId()) {\n            case R.id.createARideButton: // If user clicks the register TextView\n                startActivity(new Intent(ProfileActivity.this, CreateRideRequest.class));\n                break;\n\n            case R.id.findARideButton: // If user clicks the sign in button\n                //startActivity(new Intent(this, Rideslist.class));\n                break;\n\n            case R.id.myRidesButton:\n                //startActivity(new Intent(this, usersRides.class));\n                break;\n\n            case R.id.logoutButton: // If user clicks the register TextView\n                startActivity(new Intent(ProfileActivity.this, MainActivity.class));\n                break;\n\n            case R.id.refeshButton: // If user clicks the register TextView\n                mDbProfile.collection(\"Ride\")\n                        .get()\n                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {\n                            @Override\n                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {\n                                ArrayList<Ride> rides = new ArrayList<>();\n                                for(QueryDocumentSnapshot document: queryDocumentSnapshots){\n                                   Ride r = document.toObject(Ride.class);\n                                    Log.d(\"ride\", r.getPickupLocation());\n                                   rides.add(r);\n                                }\n                                adapter.addAll(rides);\n                            }\n                        });\n                break;\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/clementsnelson/smoothriders/ProfileActivity.java b/app/src/main/java/com/clementsnelson/smoothriders/ProfileActivity.java
+--- a/app/src/main/java/com/clementsnelson/smoothriders/ProfileActivity.java	(revision 41c67faa980d8a8204f93f33e24bca7b37de5abe)
++++ b/app/src/main/java/com/clementsnelson/smoothriders/ProfileActivity.java	(date 1636421227857)
+@@ -2,6 +2,8 @@
+ 
+ import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
++
++import android.content.Context;
+ import android.content.Intent;
+ import android.os.Bundle;
+ import android.util.Log;
+@@ -24,7 +26,9 @@
+ import com.google.firebase.firestore.FirebaseFirestore;
+ import com.google.firebase.firestore.QueryDocumentSnapshot;
+ import com.google.firebase.firestore.QuerySnapshot;
+-
++import com.google.firebase.firestore.DocumentReference;
++import com.google.android.gms.tasks.OnFailureListener;
++import com.google.android.gms.tasks.OnSuccessListener;
+ import java.util.ArrayList;
+ 
+ public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+@@ -33,7 +37,8 @@
+     private DatabaseReference reference;
+     private String userID;
+     private ArrayAdapter<Ride> adapter;
+-    private Button logoutButton, createRideButton, findRideButton, myRidesButton, refreshButton;
++    private Button logoutButton, createRideButton, findRideButton, refreshButton;
++    private static final String RIDE = "Rides";
+ 
+     private FirebaseFirestore mDbProfile = FirebaseFirestore.getInstance();
+ 
+@@ -49,17 +54,16 @@
+                 android.R.layout.simple_list_item_1,
+                 new ArrayList<Ride>()
+         );
+-
++        //adapter = new RideAdapter(this, new ArrayList<Ride>());
+         rideRequestList.setAdapter(adapter);
+ 
+         createRideButton = (Button) findViewById(R.id.createARideButton);
+         createRideButton.setOnClickListener(this);
+ 
+         findRideButton = (Button) findViewById(R.id.findARideButton);
+-        myRidesButton = (Button) findViewById(R.id.myRidesButton);
++        refreshButton = (Button) findViewById(R.id.refreshButton);
+ 
+-        refreshButton = (Button) findViewById(R.id.refeshButton);
+-        refreshButton.setOnClickListener(this);
++
+ 
+ 
+         // Get logoutButton obj reference
+@@ -67,7 +71,7 @@
+ 
+         // Create onClick Listener for logout button
+         findRideButton.setOnClickListener(this);
+-        myRidesButton.setOnClickListener(this);
++        refreshButton.setOnClickListener(this);
+         logoutButton.setOnClickListener(this);
+ 
+ 
+@@ -110,6 +114,7 @@
+         });
+ 
+     }
++
+     @Override
+     public void onClick(View v){
+         switch (v.getId()) {
+@@ -121,30 +126,31 @@
+                 //startActivity(new Intent(this, Rideslist.class));
+                 break;
+ 
+-            case R.id.myRidesButton:
+-                //startActivity(new Intent(this, usersRides.class));
+-                break;
+-
+-            case R.id.logoutButton: // If user clicks the register TextView
+-                startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+-                break;
+-
+-            case R.id.refeshButton: // If user clicks the register TextView
+-                mDbProfile.collection("Ride")
++            case R.id.refreshButton:
++                mDbProfile.collection(RIDE)
+                         .get()
+                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                             @Override
+                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                 ArrayList<Ride> rides = new ArrayList<>();
+                                 for(QueryDocumentSnapshot document: queryDocumentSnapshots){
+-                                   Ride r = document.toObject(Ride.class);
+-                                    Log.d("ride", r.getPickupLocation());
+-                                   rides.add(r);
++                                    Ride r = document.toObject(Ride.class);
++                                    rides.add(r);
++                                    Log.d(RIDE, document.getId() + " =>" + document.getData());
+                                 }
++                                adapter.clear();
+                                 adapter.addAll(rides);
+                             }
+                         });
++                //startActivity(new Intent(this, usersRides.class));
++                break;
++
++            case R.id.logoutButton: // If user clicks the register TextView
++                FirebaseAuth.getInstance().signOut();
++                startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                 break;
++
+         }
+     }
++
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\"com.clementsnelson.smoothriders.ProfileActivity\">\n\n    <include\n        android:id=\"@+id/myToolbar\"\n        layout=\"@layout/toolbar\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <TextView\n        android:id=\"@+id/greeting\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:textSize=\"20sp\"\n        android:gravity=\"center\"\n        app:layout_constraintTop_toTopOf=\"parent\"\n        app:layout_constraintLeft_toLeftOf=\"parent\"\n        app:layout_constraintRight_toRightOf=\"parent\"\n        android:layout_marginTop=\"75dp\"\n        android:layout_marginLeft=\"15dp\" />\n\n    <Button\n        android:id=\"@+id/createARideButton\"\n        android:text=\"CREATE RIDE\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintLeft_toLeftOf=\"parent\"\n        app:layout_constraintRight_toRightOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/greeting\"\n        app:layout_constraintVertical_bias=\"0.139\" />\n\n    <Button\n        android:id=\"@+id/findARideButton\"\n        android:text=\"FIND RIDE\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintLeft_toLeftOf=\"parent\"\n        app:layout_constraintRight_toRightOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/createARideButton\"\n        app:layout_constraintVertical_bias=\"0.05\" />\n\n    <Button\n        android:id=\"@+id/myRidesButton\"\n        android:text=\"MY RIDE\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintLeft_toLeftOf=\"parent\"\n        app:layout_constraintRight_toRightOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/findARideButton\"\n        app:layout_constraintVertical_bias=\"0.05\" />\n\n    <Button\n        android:id=\"@+id/refeshButton\"\n        android:text=\"MY RIDE\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintLeft_toLeftOf=\"parent\"\n        app:layout_constraintRight_toRightOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/myRidesButton\"\n        app:layout_constraintVertical_bias=\"0.05\" />\n\n    <ListView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"0dp\"\n        android:id=\"@+id/requestList\"\n        app:layout_constraintTop_toBottomOf=\"@id/refeshButton\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        />\n\n\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_profile.xml b/app/src/main/res/layout/activity_profile.xml
+--- a/app/src/main/res/layout/activity_profile.xml	(revision 41c67faa980d8a8204f93f33e24bca7b37de5abe)
++++ b/app/src/main/res/layout/activity_profile.xml	(date 1636421019035)
+@@ -28,6 +28,10 @@
+     <Button
+         android:id="@+id/createARideButton"
+         android:text="CREATE RIDE"
++        android:textSize="20sp"
++        android:textStyle="bold"
++        android:backgroundTint="@color/colorPrimaryDark"
++        android:textColor="@color/whiteText"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         app:layout_constraintBottom_toBottomOf="parent"
+@@ -41,6 +45,10 @@
+     <Button
+         android:id="@+id/findARideButton"
+         android:text="FIND RIDE"
++        android:textSize="20sp"
++        android:textStyle="bold"
++        android:backgroundTint="@color/colorPrimaryDark"
++        android:textColor="@color/whiteText"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         app:layout_constraintBottom_toBottomOf="parent"
+@@ -52,8 +60,12 @@
+         app:layout_constraintVertical_bias="0.05" />
+ 
+     <Button
+-        android:id="@+id/myRidesButton"
+-        android:text="MY RIDE"
++        android:id="@+id/refreshButton"
++        android:text="refresh recent rides"
++        android:textSize="15sp"
++        android:textStyle="bold"
++        android:backgroundTint="@color/whiteText"
++        android:textColor="@color/blackText"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         app:layout_constraintBottom_toBottomOf="parent"
+@@ -64,27 +76,15 @@
+         app:layout_constraintTop_toBottomOf="@+id/findARideButton"
+         app:layout_constraintVertical_bias="0.05" />
+ 
+-    <Button
+-        android:id="@+id/refeshButton"
+-        android:text="MY RIDE"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintLeft_toLeftOf="parent"
+-        app:layout_constraintRight_toRightOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/myRidesButton"
+-        app:layout_constraintVertical_bias="0.05" />
+ 
+     <ListView
+         android:layout_width="match_parent"
+         android:layout_height="0dp"
+         android:id="@+id/requestList"
+-        app:layout_constraintTop_toBottomOf="@id/refeshButton"
+-        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintTop_toBottomOf="@id/refreshButton"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"
++        android:visibility="visible"
+         />
+ 
+ 
+Index: app/src/main/java/com/clementsnelson/smoothriders/Ride.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.clementsnelson.smoothriders;\n\nimport androidx.annotation.NonNull;\n\npublic class Ride {\n\n    public String rideDescription, rideTime, pickupLocation, destinationLocation, rideTip, requesterEmail;\n\n    public Ride() {\n\n    }\n\n\n    public Ride(String rideDescription, String rideTime, String pickupLocation, String destinationLocation, String rideTip, String requesterEmail) {\n        this.rideDescription = rideDescription;\n        this.rideTime = rideTime;\n        this.pickupLocation = pickupLocation;\n        this.destinationLocation = destinationLocation;\n        this.rideTip = rideTip;\n        this.requesterEmail = requesterEmail;\n    }\n\n    public String getrideDescription(){ return rideDescription;}\n\n    public String getRideTime(){return rideTime;}\n\n    public String getPickupLocation(){return pickupLocation;}\n\n    public String getDestinationLocation(){return destinationLocation;}\n\n    public String getRideTip(){return rideTip;}\n\n    @NonNull\n    @Override\n    public String toString() {\n        return this.rideTime + \" \" + this.destinationLocation + \" \" + this.rideTip;\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/clementsnelson/smoothriders/Ride.java b/app/src/main/java/com/clementsnelson/smoothriders/Ride.java
+--- a/app/src/main/java/com/clementsnelson/smoothriders/Ride.java	(revision 41c67faa980d8a8204f93f33e24bca7b37de5abe)
++++ b/app/src/main/java/com/clementsnelson/smoothriders/Ride.java	(date 1636420558283)
+@@ -33,6 +33,6 @@
+     @NonNull
+     @Override
+     public String toString() {
+-        return this.rideTime + " " + this.destinationLocation + " " + this.rideTip;
++        return this.requesterEmail + " needs a ride at " + this.rideTime + " at " + this.destinationLocation + " for " + this.rideTip;
+     }
+ }
+Index: app/src/main/java/com/clementsnelson/smoothriders/RegisterUser.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.clementsnelson.smoothriders;\n\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.AppCompatActivity;\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.util.Patterns;\nimport android.view.View;\nimport android.widget.Button;\nimport android.widget.EditText;\nimport android.widget.ProgressBar;\nimport android.widget.TextView;\nimport android.widget.Toast;\nimport com.example.smoothriders.R;\nimport com.google.android.gms.tasks.OnCompleteListener;\nimport com.google.android.gms.tasks.Task;\nimport com.google.firebase.auth.AuthResult;\nimport com.google.firebase.auth.FirebaseAuth;\nimport com.google.firebase.database.FirebaseDatabase;\nimport com.google.android.gms.tasks.OnFailureListener;\nimport com.google.android.gms.tasks.OnSuccessListener;\nimport com.google.firebase.firestore.DocumentReference;\nimport com.google.firebase.firestore.FirebaseFirestore;\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\nimport com.google.firebase.firestore.QuerySnapshot;\n\n\n\npublic class RegisterUser extends AppCompatActivity implements View.OnClickListener {\n    private TextView banner, registerUser;\n    private EditText editTextFullName, editTextAge,editTextEmail, editTextPassword;\n    private ProgressBar progressBar;\n\n    private FirebaseFirestore mDb = FirebaseFirestore.getInstance();\n    private static final String TAG = \"User\";\n\n    private FirebaseAuth mAuth;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_register_user);\n\n        mAuth = FirebaseAuth.getInstance();\n\n        // Banner obj reference\n        banner = (TextView) findViewById(R.id.banner);\n        banner.setOnClickListener(this);\n\n        // Register user button obj reference\n        registerUser = (Button) findViewById(R.id.registerUser);\n        registerUser.setOnClickListener(this);\n\n        // Edit text field obj references\n        editTextFullName = findViewById(R.id.fullName);\n        editTextAge = findViewById(R.id.age);\n        editTextEmail = findViewById(R.id.email);\n        editTextPassword = findViewById(R.id.password);\n\n        // Progress bar obj reference\n        progressBar = findViewById(R.id.progressBar);\n\n\n\n    }\n\n    @Override\n    public void onClick(View v) {\n        switch (v.getId()) {\n            case R.id.banner:\n                startActivity(new Intent(this, MainActivity.class));\n                break;\n            case R.id.registerUser:\n                registerUser();\n                break;\n        }\n    }\n\n    private void registerUser() {\n        // Get string values from edit text fields on register user click\n        String email = editTextEmail.getText().toString().trim();\n        String password = editTextPassword.getText().toString().trim();\n        String fullName = editTextFullName.getText().toString().trim();\n        String age = editTextAge.getText().toString().trim();\n\n        // Sign up validation\n        if (fullName.isEmpty()) {\n            editTextFullName.setError(\"Full name is required!\");\n            editTextFullName.requestFocus();\n            return;\n        }\n\n        if (age.isEmpty()) {\n            editTextAge.setError(\"Age is required!\");\n            editTextAge.requestFocus();\n            return;\n        }\n\n        if (email.isEmpty()) { // basic email validation to check if empty.\n            editTextEmail.setError(\"Email is required!\");\n            editTextEmail.requestFocus();\n            return;\n        }\n\n        // Checks for valid email requiring @ and .com or some other domain\n        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {\n            editTextEmail.setError(\"Please provide valid email!\");\n            editTextEmail.requestFocus();\n            return;\n        }\n\n        if (password.isEmpty()) { // basic password validation to check if empty\n            editTextPassword.setError(\"Password is required!\");\n            editTextPassword.requestFocus();\n            return;\n        }\n\n        // Requires passwords be over 6 characters. (Firebase standard)\n        if(password.length() < 6) {\n            editTextPassword.setError(\"Min password should be at least 6 characters!\");\n            editTextPassword.requestFocus();\n            return;\n        }\n\n        // If form is valid set the progress bar to visible\n        progressBar.setVisibility(View.VISIBLE);\n        mAuth.createUserWithEmailAndPassword(email, password)\n                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {\n                    @Override\n                    public void onComplete(@NonNull Task<AuthResult> task) {\n\n                        if (task.isSuccessful()) {\n                            User user = new User(fullName, age, email);\n\n                            FirebaseDatabase.getInstance().getReference(TAG)\n                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())\n                                    .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {\n                                @Override\n                                public void onComplete(@NonNull Task<Void> task) {\n\n                                    // If user data is sent to the Firebase database\n                                    if (task.isSuccessful()) {\n                                        mDb.collection(TAG).add(user).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {\n                                            @Override\n                                            public void onComplete(@NonNull Task<DocumentReference> task) {\n                                                Toast.makeText(RegisterUser.this, \"User has been registered successfully!\", Toast.LENGTH_LONG).show();\n                                            }\n                                        });\n\n                                        // If user is registered take them to login page\n                                        startActivity(new Intent(RegisterUser.this, MainActivity.class));\n                                        progressBar.setVisibility(View.GONE);\n                                    }\n                                    // redirect to Login page\n                                    else {\n                                        Toast.makeText(RegisterUser.this, \"Failed to register! Try Again!\", Toast.LENGTH_LONG).show();\n                                        progressBar.setVisibility(View.GONE);\n                                    }\n\n                                }\n                            });\n                        }\n                        else {\n                            Toast.makeText(RegisterUser.this, \"Failed to register! Try Again!\", Toast.LENGTH_LONG).show();\n                            progressBar.setVisibility(View.GONE);\n                        }\n\n                    }\n                });\n\n\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/clementsnelson/smoothriders/RegisterUser.java b/app/src/main/java/com/clementsnelson/smoothriders/RegisterUser.java
+--- a/app/src/main/java/com/clementsnelson/smoothriders/RegisterUser.java	(revision 41c67faa980d8a8204f93f33e24bca7b37de5abe)
++++ b/app/src/main/java/com/clementsnelson/smoothriders/RegisterUser.java	(date 1636415243003)
+@@ -141,6 +141,7 @@
+ 
+                                     // If user data is sent to the Firebase database
+                                     if (task.isSuccessful()) {
++
+                                         mDb.collection(TAG).add(user).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                             @Override
+                                             public void onComplete(@NonNull Task<DocumentReference> task) {
+Index: app/src/main/java/com/clementsnelson/smoothriders/CreateRideRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.clementsnelson.smoothriders;\n\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.AppCompatActivity;\n\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.view.View;\nimport android.widget.Button;\nimport android.widget.EditText;\nimport android.widget.ProgressBar;\nimport android.widget.Toast;\n\nimport com.example.smoothriders.R;\nimport com.google.android.gms.tasks.OnCompleteListener;\nimport com.google.android.gms.tasks.Task;\nimport com.google.firebase.auth.FirebaseAuth;\nimport com.google.firebase.database.FirebaseDatabase;\nimport com.google.firebase.firestore.DocumentReference;\nimport com.google.firebase.firestore.FirebaseFirestore;\n\npublic class CreateRideRequest extends AppCompatActivity implements View.OnClickListener {\n    private EditText editTextDescription, editTextTime, editTextPickupLocation, editTextDestinationLocation, editTextRideTip;\n    private Button createRideRequestBtn;\n    private ProgressBar progressBar;\n\n    private FirebaseFirestore mDbb = FirebaseFirestore.getInstance();\n\n    private FirebaseAuth mAuth;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_create_ride_request);\n\n        mAuth = FirebaseAuth.getInstance();\n\n        // EditText obj references\n        editTextDescription = findViewById(R.id.rideDescription);\n        editTextTime = findViewById(R.id.rideTime);\n        editTextPickupLocation = findViewById(R.id.pickupLocation);\n        editTextDestinationLocation = findViewById(R.id.destinationLocation);\n        editTextRideTip = findViewById(R.id.rideTip);\n\n        // Button obj reference\n        createRideRequestBtn = findViewById(R.id.createRequest);\n        // Set onClick listener for button\n        createRideRequestBtn.setOnClickListener(this);\n\n        // Progress bar obj reference\n        progressBar = findViewById(R.id.progressBar);\n\n    }\n\n    @Override\n    public void onClick(View v) {\n        switch (v.getId()) {\n            case R.id.createRequest:\n                createRideRequest();\n                break;\n        }\n    }\n\n    private void createRideRequest() {\n        // Get string values from edit text fields on create request button click\n        String rideDescription = editTextDescription.getText().toString().trim();\n        String rideTime = editTextTime.getText().toString().trim();\n        String pickupLocation = editTextPickupLocation.getText().toString().trim();\n        String destinationLocation = editTextDestinationLocation.getText().toString().trim();\n        String rideTip = editTextRideTip.getText().toString().trim();\n        String requesterEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail().toString().trim();\n\n        // Ride request validation\n        if (rideDescription.isEmpty()) {\n            editTextDescription.setError(\"A description is required!\");\n            editTextDescription.requestFocus();\n            return;\n        }\n\n        if (rideTime.isEmpty()) {\n            editTextTime.setError(\"A time is required!\");\n            editTextTime.requestFocus();\n            return;\n        }\n\n        if (pickupLocation.isEmpty()) {\n            editTextPickupLocation.setError(\"A pickup location is required!\");\n            editTextPickupLocation.requestFocus();\n            return;\n        }\n\n        if (destinationLocation.isEmpty()) {\n            editTextDestinationLocation.setError(\"A destination location is required!\");\n            editTextDescription.requestFocus();\n            return;\n        }\n\n        // If form is valid set the progress bar to visible\n        progressBar.setVisibility(View.VISIBLE);\n\n        Ride ride = new Ride(rideDescription, rideTime, pickupLocation, destinationLocation, rideTip, requesterEmail);\n\n        FirebaseDatabase.getInstance().getReference(\"request\")\n                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())\n                .setValue(ride).addOnCompleteListener(new OnCompleteListener<Void>() {\n            @Override\n            public void onComplete(@NonNull Task<Void> task) {\n\n                // If ride data is sent to the Firebase database\n                if (task.isSuccessful()) {\n                    mDbb.collection(\"Rides\").add(ride).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {\n                        @Override\n                        public void onComplete(@NonNull Task<DocumentReference> task) {\n                            Toast.makeText(CreateRideRequest.this, \"Ride has been created successfully!\", Toast.LENGTH_LONG).show();\n                        }\n                    });\n                    // If ride is created redirect to rides page (NOT SETUP YET)\n                    startActivity(new Intent(CreateRideRequest.this, ProfileActivity.class));\n                    progressBar.setVisibility(View.GONE);\n                }\n                // If ride is not added\n                else {\n                    Toast.makeText(CreateRideRequest.this, \"Ride failed to create. Try Again!\", Toast.LENGTH_LONG).show();\n                    progressBar.setVisibility(View.GONE);\n                }\n            }\n        });\n\n    }\n\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/clementsnelson/smoothriders/CreateRideRequest.java b/app/src/main/java/com/clementsnelson/smoothriders/CreateRideRequest.java
+--- a/app/src/main/java/com/clementsnelson/smoothriders/CreateRideRequest.java	(revision 41c67faa980d8a8204f93f33e24bca7b37de5abe)
++++ b/app/src/main/java/com/clementsnelson/smoothriders/CreateRideRequest.java	(date 1636415243009)
+@@ -42,6 +42,7 @@
+         editTextDestinationLocation = findViewById(R.id.destinationLocation);
+         editTextRideTip = findViewById(R.id.rideTip);
+ 
++
+         // Button obj reference
+         createRideRequestBtn = findViewById(R.id.createRequest);
+         // Set onClick listener for button
