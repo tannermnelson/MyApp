@@ -33,6 +33,8 @@ public class Ride {
     @NonNull
     @Override
     public String toString() {
-        return this.requesterEmail + " needs a ride at " + this.rideTime + " at " + this.destinationLocation + " for " + this.rideTip;
+        return this.requesterEmail + " is requesting a ride from " + this.pickupLocation + " to " +
+                this.destinationLocation + " at " + this.rideTime + " for $" + this.rideTip + " dollars.";
+        // return this.requesterEmail + " needs a ride at " + this.rideTime + " at " + this.destinationLocation + " for " + this.rideTip;
     }
 }
