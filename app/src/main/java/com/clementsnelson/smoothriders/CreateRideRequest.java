@@ -3,12 +3,14 @@ package com.clementsnelson.smoothriders;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.smoothriders.R;
@@ -19,10 +21,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
+
 public class CreateRideRequest extends AppCompatActivity implements View.OnClickListener {
     private EditText editTextDescription, editTextTime, editTextPickupLocation, editTextDestinationLocation, editTextRideTip;
-    private Button createRideRequestBtn;
+    private Button createRideRequestBtn, logoutButtonBtn;
     private ProgressBar progressBar;
+    private Calendar calendar;
+    private int currentHour,currentMinute;
+    private String amPm;
+    private TimePickerDialog timePickerDialog;
 
     private FirebaseFirestore mDbb = FirebaseFirestore.getInstance();
 
@@ -47,6 +55,14 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
         // Set onClick listener for button
         createRideRequestBtn.setOnClickListener(this);
 
+        // Logout button obj reference
+        logoutButtonBtn = findViewById(R.id.logoutButton);
+        // Set onClick listener for button
+        logoutButtonBtn.setOnClickListener(this);
+
+        // Create onClick listener for editTextTime
+        editTextTime.setOnClickListener(this);
+
         // Progress bar obj reference
         progressBar = findViewById(R.id.progressBar);
 
@@ -58,7 +74,38 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
             case R.id.createRequest:
                 createRideRequest();
                 break;
+            case R.id.logoutButton: // If user clicks the logout button
+                logoutUser();
+                break;
+            case R.id.rideTime:
+                getRideTime();
+                break;
         }
+    }
+
+    private void getRideTime() {
+        calendar = Calendar.getInstance();
+        currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        currentMinute = calendar.get(Calendar.MINUTE);
+
+        timePickerDialog = new TimePickerDialog(CreateRideRequest.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+                if (hourOfDay >= 12) {
+                    amPm = "PM";
+                } else {
+                    amPm = "AM";
+                }
+                editTextTime.setText(String.format("%02d:%02d", hourOfDay, minutes) + amPm);
+            }
+        }, currentHour, currentMinute, false) ;
+
+        timePickerDialog.show();
+    }
+
+    private void logoutUser() {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(CreateRideRequest.this, MainActivity.class));
     }
 
     private void createRideRequest() {
