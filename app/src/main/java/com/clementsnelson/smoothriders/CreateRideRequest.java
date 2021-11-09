@@ -50,6 +50,7 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
         editTextDestinationLocation = findViewById(R.id.destinationLocation);
         editTextRideTip = findViewById(R.id.rideTip);
 
+
         // Button obj reference
         createRideRequestBtn = findViewById(R.id.createRequest);
         // Set onClick listener for button

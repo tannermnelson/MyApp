@@ -141,6 +141,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
                                     // If user data is sent to the Firebase database
                                     if (task.isSuccessful()) {
+
                                         mDb.collection(TAG).add(user).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                             @Override
                                             public void onComplete(@NonNull Task<DocumentReference> task) {

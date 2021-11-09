@@ -2,6 +2,8 @@ package com.clementsnelson.smoothriders;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +26,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
+import com.google.firebase.firestore.DocumentReference;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,7 +37,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference reference;
     private String userID;
     private ArrayAdapter<Ride> adapter;
-    private Button logoutButton, createRideButton, findRideButton, myRidesButton, refreshButton;
+    private Button logoutButton, createRideButton, findRideButton, refreshButton;
+    private static final String RIDE = "Rides";
 
     private FirebaseFirestore mDbProfile = FirebaseFirestore.getInstance();
 
@@ -49,17 +54,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 android.R.layout.simple_list_item_1,
                 new ArrayList<Ride>()
         );
-
+        //adapter = new RideAdapter(this, new ArrayList<Ride>());
         rideRequestList.setAdapter(adapter);
 
         createRideButton = (Button) findViewById(R.id.createARideButton);
         createRideButton.setOnClickListener(this);
 
         findRideButton = (Button) findViewById(R.id.findARideButton);
-        myRidesButton = (Button) findViewById(R.id.myRidesButton);
+        refreshButton = (Button) findViewById(R.id.refreshButton);
 
-        refreshButton = (Button) findViewById(R.id.refeshButton);
-        refreshButton.setOnClickListener(this);
+
 
 
         // Get logoutButton obj reference
@@ -67,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         // Create onClick Listener for logout button
         findRideButton.setOnClickListener(this);
-        myRidesButton.setOnClickListener(this);
+        refreshButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
 
 
@@ -110,6 +114,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
 
     }
+
     @Override
     public void onClick(View v){
         switch (v.getId()) {
@@ -121,30 +126,31 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 //startActivity(new Intent(this, Rideslist.class));
                 break;
 
-            case R.id.myRidesButton:
-                //startActivity(new Intent(this, usersRides.class));
-                break;
-
-            case R.id.logoutButton: // If user clicks the register TextView
-                startActivity(new Intent(ProfileActivity.this, MainActivity.class));
-                break;
-
-            case R.id.refeshButton: // If user clicks the register TextView
-                mDbProfile.collection("Ride")
+            case R.id.refreshButton:
+                mDbProfile.collection(RIDE)
                         .get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 ArrayList<Ride> rides = new ArrayList<>();
                                 for(QueryDocumentSnapshot document: queryDocumentSnapshots){
-                                   Ride r = document.toObject(Ride.class);
-                                    Log.d("ride", r.getPickupLocation());
-                                   rides.add(r);
+                                    Ride r = document.toObject(Ride.class);
+                                    rides.add(r);
+                                    Log.d(RIDE, document.getId() + " =>" + document.getData());
                                 }
+                                adapter.clear();
                                 adapter.addAll(rides);
                             }
                         });
+                //startActivity(new Intent(this, usersRides.class));
                 break;
+
+            case R.id.logoutButton: // If user clicks the register TextView
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                break;
+
         }
     }
+
 }
