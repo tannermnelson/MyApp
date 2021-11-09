@@ -30,6 +30,8 @@ public class Ride {
 
     public String getRideTip(){return rideTip;}
 
+    public String getRequesterEmail(){return requesterEmail;}
+
     @NonNull
     @Override
     public String toString() {

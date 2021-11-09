@@ -65,12 +65,26 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         rideRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Log.d("error", "error");
-                Intent i = new Intent(ProfileActivity.this, RideInformation.class);
-                //i.putExtra("info", (Parcelable) adapter);
+
+                // String currentName = adapterView.getItemAtPosition(position).toString();
+                Ride selectedRide = (Ride) adapterView.getItemAtPosition(position);
+                String requesterEmail = selectedRide.getRequesterEmail();
+                String pickupLocation = selectedRide.getPickupLocation();
+                String destinationLocation = selectedRide.getDestinationLocation();
+                String rideDescription = selectedRide.getrideDescription();
+                String rideTime = selectedRide.getRideTime();
+                String rideTip = selectedRide.getRideTip();
+
+                Intent i = new Intent(getApplicationContext(), RideInformation.class);
+                i.putExtra("email", requesterEmail);
+                i.putExtra("pickup", pickupLocation);
+                i.putExtra("destination", destinationLocation);
+                i.putExtra("description", rideDescription);
+                i.putExtra("time", rideTime);
+                i.putExtra("tip", rideTip);
+
+
                 startActivity(i);
-                Toast.makeText(ProfileActivity.this,
-                        "", Toast.LENGTH_SHORT).show();
             }
         });
 
