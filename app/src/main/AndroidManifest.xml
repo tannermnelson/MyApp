@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name="com.clementsnelson.smoothriders.RideInformation"
+            android:exported="false" />
+        <activity
             android:name="com.clementsnelson.smoothriders.CreateRideRequest"
             android:exported="false" />
         <activity

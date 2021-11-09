@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -56,6 +59,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         );
         //adapter = new RideAdapter(this, new ArrayList<Ride>());
         rideRequestList.setAdapter(adapter);
+
+        rideRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Log.d("error", "error");
+                Intent i = new Intent(ProfileActivity.this, RideInformation.class);
+                //i.putExtra("info", (Parcelable) adapter);
+                startActivity(i);
+                Toast.makeText(ProfileActivity.this,
+                        "", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         createRideButton = (Button) findViewById(R.id.createARideButton);
         createRideButton.setOnClickListener(this);
