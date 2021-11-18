@@ -40,11 +40,11 @@
         app:layout_constraintTop_toBottomOf="@+id/greeting" />
 
     <Button
-        android:id="@+id/findARideButton"
+        android:id="@+id/myRideButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimaryDark"
-        android:text="FIND RIDE"
+        android:text="MY RIDES"
         android:textColor="@color/whiteText"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -67,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/findARideButton" />
+        app:layout_constraintTop_toBottomOf="@+id/myRideButton" />
 
 
     <ListView

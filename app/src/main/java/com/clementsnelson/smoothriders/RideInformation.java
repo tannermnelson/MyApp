@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.protobuf.LazyStringArrayList;
 
 import java.util.ArrayList;
 
@@ -30,11 +32,14 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference reference;
     private String userID;
 
+    static final String key = "com.clemntsnelson.smoothriders";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ride_information);
 
+        //pull string info from intent
         String requesterEmail = getIntent().getExtras().get("email").toString();
         String pickupLocation = getIntent().getExtras().get("pickup").toString();
         String destinationLocation = getIntent().getExtras().get("destination").toString();
@@ -67,10 +72,11 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
 
         // Get logout Button reference
         logoutButton = (Button) findViewById(R.id.logoutButton);
-        // Get onClick listenter for logoutButton
+        // Get onClick listener for logoutButton
         logoutButton.setOnClickListener(this);
 
         acceptButton = (Button) findViewById(R.id.acceptButton);
+        acceptButton.setOnClickListener(this);
 
         driverName.setText(requesterEmail);
         pickupAddress.setText(pickupLocation);
@@ -85,7 +91,17 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.acceptButton: // If user clicks the register TextView
-                //startActivity(new Intent(RideInformation.this, CreateRideRequest.class));
+                //Bundle b = new Bundle();
+                //b.putStringArray(key, new String[]{ride.getEmail()});
+
+                //Intent i = new Intent(this, UserRides.class);
+                //i.putExtra(b);
+
+                // get method to add said request to this users acceptedRides list
+                // remove this request from profileActivity display
+                startActivity(new Intent(RideInformation.this, UserRides.class));
+
+                Toast.makeText(RideInformation.this, "Ride has been accepted!", Toast.LENGTH_LONG).show();
                 break;
 
             case R.id.logoutButton: // If user clicks the register TextView

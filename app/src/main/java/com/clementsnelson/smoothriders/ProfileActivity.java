@@ -41,7 +41,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference reference;
     private String userID;
     private ArrayAdapter<Ride> adapter;
-    private Button logoutButton, createRideButton, findRideButton, refreshButton;
+    private Button logoutButton, createRideButton, myRideButton, refreshButton;
     private static final String RIDE = "Rides";
     private ProgressBar progressBar;
 
@@ -91,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         createRideButton = (Button) findViewById(R.id.createARideButton);
         createRideButton.setOnClickListener(this);
 
-        findRideButton = (Button) findViewById(R.id.findARideButton);
+        myRideButton = (Button) findViewById(R.id.myRideButton);
         refreshButton = (Button) findViewById(R.id.refreshButton);
 
         // Get progress bar reference
@@ -101,7 +101,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         logoutButton = (Button) findViewById(R.id.logoutButton);
 
         // Create onClick Listener for logout button
-        findRideButton.setOnClickListener(this);
+        myRideButton.setOnClickListener(this);
         refreshButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
 
@@ -147,11 +147,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v){
         switch (v.getId()) {
-            case R.id.createARideButton: // If user clicks the register TextView
+            case R.id.createARideButton: // If user clicks the create Rides button
                 startActivity(new Intent(ProfileActivity.this, CreateRideRequest.class));
                 break;
 
-            case R.id.findARideButton: // If user clicks the sign in button
+            case R.id.myRideButton: // If user clicks the myRides button
                 //startActivity(new Intent(this, Rideslist.class));
                 break;
 
@@ -173,10 +173,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 progressBar.setVisibility(View.GONE);
                             }
                         });
-                //startActivity(new Intent(this, usersRides.class));
                 break;
 
-            case R.id.logoutButton: // If user clicks the register TextView
+            case R.id.logoutButton: // If user clicks the logout Button
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(ProfileActivity.this, MainActivity.class));
                 break;
