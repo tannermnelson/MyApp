@@ -24,7 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class UserRides extends AppCompatActivity implements View.OnClickListener {
+public class UserAcceptedRides extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseUser user;
     private Button logoutBtn, refreshButton;
@@ -36,7 +36,7 @@ public class UserRides extends AppCompatActivity implements View.OnClickListener
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_userrides);
+        setContentView(R.layout.activity_user_accepted_rides);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -66,7 +66,7 @@ public class UserRides extends AppCompatActivity implements View.OnClickListener
         switch (view.getId()){
             case R.id.logoutButton:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(UserRides.this, MainActivity.class));
+                startActivity(new Intent(UserAcceptedRides.this, MainActivity.class));
                 break;
 
             case R.id.refreshButton:
@@ -85,7 +85,7 @@ public class UserRides extends AppCompatActivity implements View.OnClickListener
                         ArrayList<Ride> rides = new ArrayList<>();
                         for(QueryDocumentSnapshot document: queryDocumentSnapshots){
                             Ride r = document.toObject(Ride.class);
-                            if (r.getRequesterEmail().equals(user.getEmail())) {
+                            if (r.getDriverEmail().equals(user.getEmail())) {
                                 rides.add(r);
                                 Log.d(RIDE, document.getId() + " =>" + document.getData());
                             }
@@ -99,6 +99,6 @@ public class UserRides extends AppCompatActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(UserRides.this, ProfileActivity.class));
+        startActivity(new Intent(UserAcceptedRides.this, ProfileActivity.class));
     }
 }

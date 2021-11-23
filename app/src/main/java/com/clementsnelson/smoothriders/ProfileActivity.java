@@ -40,8 +40,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
+    private TextView greetingTextView;
     private ArrayAdapter<Ride> adapter;
-    private Button logoutButton, createRideButton, myRideButton, refreshButton;
+    private Button logoutButton, createRideButton, ridesPosted, ridesAccepted, refreshButton;
     private static final String RIDE = "Rides";
     private ProgressBar progressBar;
 
@@ -66,23 +67,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                // String currentName = adapterView.getItemAtPosition(position).toString();
                 Ride selectedRide = (Ride) adapterView.getItemAtPosition(position);
-                String requesterEmail = selectedRide.getRequesterEmail();
-                String pickupLocation = selectedRide.getPickupLocation();
-                String destinationLocation = selectedRide.getDestinationLocation();
-                String rideDescription = selectedRide.getrideDescription();
-                String rideTime = selectedRide.getRideTime();
-                String rideTip = selectedRide.getRideTip();
-
-                Intent i = new Intent(getApplicationContext(), RideInformation.class);
-                i.putExtra("email", requesterEmail);
-                i.putExtra("pickup", pickupLocation);
-                i.putExtra("destination", destinationLocation);
-                i.putExtra("description", rideDescription);
-                i.putExtra("time", rideTime);
-                i.putExtra("tip", rideTip);
-
+                Intent i = new Intent(ProfileActivity.this, RideInformation.class);
+                i.putExtra("Ride", selectedRide);
 
                 startActivity(i);
             }
@@ -91,19 +78,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         createRideButton = (Button) findViewById(R.id.createARideButton);
         createRideButton.setOnClickListener(this);
 
-        myRideButton = (Button) findViewById(R.id.myRideButton);
-        refreshButton = (Button) findViewById(R.id.refreshButton);
+        ridesAccepted = (Button) findViewById(R.id.ridesAccepted);
+        ridesAccepted.setOnClickListener(this);
 
-        // Get progress bar reference
-        progressBar = findViewById(R.id.progressBar);
+        ridesPosted = (Button) findViewById(R.id.ridesPosted);
+        ridesPosted.setOnClickListener(this);
+
+        refreshButton = (Button) findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(this);
 
         // Get logoutButton obj reference
         logoutButton = (Button) findViewById(R.id.logoutButton);
-
-        // Create onClick Listener for logout button
-        myRideButton.setOnClickListener(this);
-        refreshButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
+
+        // Get progress bar reference
+        progressBar = findViewById(R.id.progressBar);
 
         // Get current user obj by searching db by User ID.
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -111,36 +100,34 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         userID = user.getUid();
 
         // Get final obj references to fillable text views
-        final TextView greetingTextView = (TextView) findViewById(R.id.greeting);
-        //final TextView fullNameTextView = (TextView) findViewById(R.id.fullName);
-        //final TextView emailTextView = (TextView) findViewById(R.id.email);
-        //final TextView ageTextView = (TextView) findViewById(R.id.age);
+        greetingTextView = (TextView) findViewById(R.id.greeting);
+        greetingTextView.setText("Hello " + user.getEmail());
 
-        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Create User obj
-                User userProfile = snapshot.getValue(User.class);
-
-                if (userProfile != null) { // User profile exists
-                    // Get user information from userProfile
-                    String fullName = userProfile.fullName;
-                    String email = userProfile.email;
-                    String age = userProfile.age;
-
-                    // Set the Text Views to user profile info
-                    greetingTextView.setText("Welcome, " + fullName + "!");
-                    //fullNameTextView.setText(fullName);
-                    //emailTextView.setText(email);
-                    //ageTextView.setText(age);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { // User doesn't exist
-                Toast.makeText(ProfileActivity.this, "Something bad happened!", Toast.LENGTH_LONG).show();
-            }
-        });
+//        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                // Create User obj
+//                User userProfile = snapshot.getValue(User.class);
+//
+//                if (userProfile != null) { // User profile exists
+//                    // Get user information from userProfile
+//                    String fullName = userProfile.fullName;
+//                    String email = userProfile.email;
+//                    String age = userProfile.age;
+//
+//                    // Set the Text Views to user profile info
+//                    greetingTextView.setText("Welcome, " + fullName + "!");
+//                    //fullNameTextView.setText(fullName);
+//                    //emailTextView.setText(email);
+//                    //ageTextView.setText(age);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) { // User doesn't exist
+//                Toast.makeText(ProfileActivity.this, "Something bad happened!", Toast.LENGTH_LONG).show();
+//            }
+//        });
 
     }
 
@@ -151,8 +138,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(ProfileActivity.this, CreateRideRequest.class));
                 break;
 
-            case R.id.myRideButton: // If user clicks the myRides button
-                //startActivity(new Intent(this, Rideslist.class));
+            case R.id.ridesAccepted: // If user clicks the Rides Accepted button
+                startActivity(new Intent(this, UserAcceptedRides.class));
+                break;
+
+            case R.id.ridesPosted: // If user clicks the Rides Posted button
+                startActivity(new Intent(this, UserRides.class));
                 break;
 
             case R.id.refreshButton:
@@ -165,8 +156,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 ArrayList<Ride> rides = new ArrayList<>();
                                 for(QueryDocumentSnapshot document: queryDocumentSnapshots){
                                     Ride r = document.toObject(Ride.class);
-                                    rides.add(r);
-                                    Log.d(RIDE, document.getId() + " =>" + document.getData());
+                                    if (!r.getIsAccepted()) {
+                                        rides.add(r);
+                                        Log.d(RIDE, document.getId() + " =>" + document.getData());
+                                    }
                                 }
                                 adapter.clear();
                                 adapter.addAll(rides);

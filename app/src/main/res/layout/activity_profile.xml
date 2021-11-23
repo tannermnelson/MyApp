@@ -40,11 +40,11 @@
         app:layout_constraintTop_toBottomOf="@+id/greeting" />
 
     <Button
-        android:id="@+id/myRideButton"
+        android:id="@+id/ridesPosted"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimaryDark"
-        android:text="MY RIDES"
+        android:text="POSTED RIDES"
         android:textColor="@color/whiteText"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -53,6 +53,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createARideButton" />
+
+    <Button
+        android:id="@+id/ridesAccepted"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="ACCEPTED RIDES"
+        android:textColor="@color/whiteText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ridesPosted" />
 
     <Button
         android:id="@+id/refreshButton"
@@ -67,7 +82,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myRideButton" />
+        app:layout_constraintTop_toBottomOf="@+id/ridesAccepted" />
 
 
     <ListView
