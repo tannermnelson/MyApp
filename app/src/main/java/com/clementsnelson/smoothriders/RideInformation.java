@@ -110,6 +110,9 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
         Intent i = getIntent();
         Ride selectedRide = (Ride) i.getSerializableExtra("Ride");
 
+        // In this function we need to update the isAccepted and driverEmail field
+        // in document in Rides collection.
+        // After we update those values our refresh buttons will work.
         user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase db = FirebaseDatabase.getInstance();
 

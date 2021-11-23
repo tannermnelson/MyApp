@@ -86,6 +86,9 @@ public class UserAcceptedRides extends AppCompatActivity implements View.OnClick
                         for(QueryDocumentSnapshot document: queryDocumentSnapshots){
                             Ride r = document.toObject(Ride.class);
                             if (r.getDriverEmail().equals(user.getEmail())) {
+                                // If we update the driverEmail field in document this will only
+                                // pull rides from Rides documents where the driverEmail field is
+                                // equal to the current users email.
                                 rides.add(r);
                                 Log.d(RIDE, document.getId() + " =>" + document.getData());
                             }

@@ -157,6 +157,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 for(QueryDocumentSnapshot document: queryDocumentSnapshots){
                                     Ride r = document.toObject(Ride.class);
                                     if (!r.getIsAccepted()) {
+                                        // By default rides are created with the isAccepted field
+                                        // set to false. When a user accepts the ride we need to
+                                        // update that field to true so they don't show up in the
+                                        // all rides list.
                                         rides.add(r);
                                         Log.d(RIDE, document.getId() + " =>" + document.getData());
                                     }

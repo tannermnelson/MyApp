@@ -86,6 +86,13 @@ public class UserRides extends AppCompatActivity implements View.OnClickListener
                         for(QueryDocumentSnapshot document: queryDocumentSnapshots){
                             Ride r = document.toObject(Ride.class);
                             if (r.getRequesterEmail().equals(user.getEmail())) {
+                                // The requesters email is added to the Rides document on creation
+                                // with users email. This function works right now and lists all the
+                                // rides that are posted by the user based on their email.
+
+                                // We also need to add field in the RideInformation class where
+                                // it pulls the isAccepted field and says whether a ride is accepted
+                                // or not when showing the ride information.
                                 rides.add(r);
                                 Log.d(RIDE, document.getId() + " =>" + document.getData());
                             }

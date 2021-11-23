@@ -163,10 +163,12 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
                     mDbb.collection("Rides").add(ride).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {
+                            // We need to somehow get a reference to the Rides document and update
+                            // it here with the ID of the document in the rideId field of document.
                             Toast.makeText(CreateRideRequest.this, "Ride has been created successfully!", Toast.LENGTH_LONG).show();
                         }
                     });
-                    // If ride is created redirect to rides page (NOT SETUP YET)
+                    // If ride is created redirect to profile activity
                     startActivity(new Intent(CreateRideRequest.this, ProfileActivity.class));
                     progressBar.setVisibility(View.GONE);
                 }
