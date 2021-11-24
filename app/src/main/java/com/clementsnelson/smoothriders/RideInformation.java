@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smoothriders.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -93,7 +94,7 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
         editButton.setOnClickListener(this);
 
         // Get reference to the delete ride button and create onClick listener
-        deleteButton = (Button) findViewById(R.id.acceptButton);
+        deleteButton = (Button) findViewById(R.id.deleteButton);
         deleteButton.setOnClickListener(this);
     } // end of onCreate method
 
@@ -142,17 +143,29 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
                 .collection("Rides")
                 .document(selectedRide.getRideId());
 
-        // Delete the Document
-        rideRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(RideInformation.this, "Ride has been deleted", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(RideInformation.this, ProfileActivity.class));
-            }
+        if (!selectedRide.getRequesterEmail().equals(user.getEmail())) {
+            Toast.makeText(RideInformation.this, "A user can't delete a ride from another user ",
+                    Toast.LENGTH_LONG).show();
+            startActivity(new Intent(RideInformation.this, ProfileActivity.class));
+        }
+        else {
+            // Delete the Document
+            rideRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(RideInformation.this, "Ride has been deleted", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(RideInformation.this, ProfileActivity.class));
+                }
 
-        });
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(RideInformation.this, "Could not delete", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
-        Toast.makeText(RideInformation.this, "Ride was not deleted, try again", Toast.LENGTH_LONG).show();
+
     } // end of deleteRide method
 
     // Method called when Edit Rides button is clicked
