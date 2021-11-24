@@ -192,5 +192,10 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
 
     }
 
-
+    // Method to alter the default behavior of the back button in Android
+    @Override
+    public void onBackPressed() {
+        // If user clicks the back button take them to them to the Profile Activity view
+        startActivity(new Intent(CreateRideRequest.this, ProfileActivity.class));
+    } // end of onBackPressed method
 }

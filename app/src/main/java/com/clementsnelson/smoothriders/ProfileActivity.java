@@ -154,4 +154,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    // Method to alter the default behavior of the back button in Android
+    @Override
+    public void onBackPressed() {
+        // If user clicks the back button take them to them to the Profile Activity view
+        startActivity(new Intent(ProfileActivity.this, ProfileActivity.class));
+    } // end of onBackPressed method
 }

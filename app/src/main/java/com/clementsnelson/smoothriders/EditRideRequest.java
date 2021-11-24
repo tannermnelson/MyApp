@@ -109,4 +109,11 @@ public class EditRideRequest extends AppCompatActivity implements View.OnClickLi
 
     } // end of updateRideRequest method
 
+    // Method to alter the default behavior of the back button in Android
+    @Override
+    public void onBackPressed() {
+        // If user clicks the back button take them to them to the Profile Activity view
+        startActivity(new Intent(EditRideRequest.this, ProfileActivity.class));
+    } // end of onBackPressed method
+
 } // end of EditRideRequest class
