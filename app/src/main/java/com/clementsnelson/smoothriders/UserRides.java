@@ -111,7 +111,7 @@ public class UserRides extends AppCompatActivity implements View.OnClickListener
                         for(QueryDocumentSnapshot document: queryDocumentSnapshots){
                             // Set r equal to the the a document in the Rides collection
                             Ride r = document.toObject(Ride.class);
-                            if (r.getRequesterEmail().equals(user.getEmail())) {
+                            if (r.getRequesterEmail().equals(user.getEmail()) && r.getIsAccepted() == false) {
                                 // The requesters email is added to the Rides document on creation
                                 // with users email. This function works right now and lists all the
                                 // rides that are posted by the user based on their email.

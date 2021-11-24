@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
     private int currentHour,currentMinute;
     private String amPm;
     private TimePickerDialog timePickerDialog;
+    private DocumentReference rideRef;
 
     private FirebaseFirestore mDbb = FirebaseFirestore.getInstance();
 
@@ -49,7 +51,6 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
         editTextPickupLocation = findViewById(R.id.pickupLocation);
         editTextDestinationLocation = findViewById(R.id.destinationLocation);
         editTextRideTip = findViewById(R.id.rideTip);
-
 
         // Button obj reference
         createRideRequestBtn = findViewById(R.id.createRequest);
@@ -163,8 +164,17 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
                     mDbb.collection("Rides").add(ride).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {
-                            // We need to somehow get a reference to the Rides document and update
-                            // it here with the ID of the document in the rideId field of document.
+
+                            // Get reference to Ride document in Firestore
+                            DocumentReference rideRef = task.getResult();
+
+                            // Get Document ID
+                            String rideId = rideRef.getId();
+
+                            // Update rideId field in Ride document
+                            rideRef.update("rideId", rideId);
+
+                            // Send toast to user if Ride is added successfully
                             Toast.makeText(CreateRideRequest.this, "Ride has been created successfully!", Toast.LENGTH_LONG).show();
                         }
                     });

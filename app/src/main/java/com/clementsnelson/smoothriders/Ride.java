@@ -38,6 +38,7 @@ public class Ride implements Serializable {
     public String getRideTip(){return rideTip;}
     public String getRequesterEmail(){return requesterEmail;}
     public String getDriverEmail(){return driverEmail;}
+    public String getRideId(){return rideId;}
     public Boolean getIsAccepted(){return isAccepted;}
 
     // Setter for isAccepted and driverEmail

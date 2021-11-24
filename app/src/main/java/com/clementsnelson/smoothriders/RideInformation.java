@@ -7,13 +7,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smoothriders.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RideInformation extends AppCompatActivity implements View.OnClickListener {
 
@@ -21,7 +26,7 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
     private FirebaseUser user;
     // Initialize references to objects in Activity file
     private TextView tip, time, rideDescription, driverName, pickupAddress, destination;
-    private Button acceptButton, logoutButton;
+    private Button acceptButton, logoutButton, editButton, deleteButton;
     // Get database refernce from Firebase
     private DatabaseReference reference;
     // Initialize userID String for use in Greeting
@@ -46,6 +51,10 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
         String description = selectedRide.getRideDescription();
         String rideTime = selectedRide.getRideTime();
         String rideTip = selectedRide.getRideTip();
+        String rideId = selectedRide.getRideId();
+
+        // Get Boolean value from selectedRide
+        Boolean isAccepted = selectedRide.getIsAccepted();
 
         // Get FireBase user instance
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -78,6 +87,14 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
         // Get reference to the accept ride button and create onClick listener
         acceptButton = (Button) findViewById(R.id.acceptButton);
         acceptButton.setOnClickListener(this);
+
+        // Get reference to the edit ride button and create onClick listener
+        editButton = (Button) findViewById(R.id.editButton);
+        editButton.setOnClickListener(this);
+
+        // Get reference to the delete ride button and create onClick listener
+        deleteButton = (Button) findViewById(R.id.acceptButton);
+        deleteButton.setOnClickListener(this);
     } // end of onCreate method
 
     // Method for onClick listeners in onCreate
@@ -93,30 +110,117 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(RideInformation.this, MainActivity.class));
                 break;
 
-            // if user clicks the accept rides button
+            // if user clicks the accept ride button
             case R.id.acceptButton:
                 // Call the acceptRide method
                 acceptRide();
-                // Return the user to the view with all of the rides they have accepted
-                startActivity(new Intent(RideInformation.this, UserAcceptedRides.class));
-                // Create Toast for user that the Ride has be accepted
-                Toast.makeText(RideInformation.this, "Ride has been accepted!", Toast.LENGTH_LONG).show();
+                break;
+
+            // if user clicks the edit ride button
+            case R.id.editButton:
+                // Call the editRide method
+                editRide();
+                break;
+
+            // if user clicks the edit ride button
+            case R.id.deleteButton:
+                // Call the deleteRide method
+                deleteRide();
                 break;
         }
     } // end of onClick method
 
-    // Method called when refresh button is clicked
+    private void deleteRide() {
+        // Receive intent from ProfileActivity
+        Intent i = getIntent();
+
+        // Create Ride object selectedRide from intent sent from ProfileActivity
+        Ride selectedRide = (Ride) i.getSerializableExtra("Ride");
+
+        // Get Document reference in Firestore from collection using rideId
+        DocumentReference rideRef = FirebaseFirestore.getInstance()
+                .collection("Rides")
+                .document(selectedRide.getRideId());
+
+        // Delete the Document
+        rideRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                startActivity(new Intent(RideInformation.this, ProfileActivity.class));
+                Toast.makeText(RideInformation.this, "Ride has been deleted", Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+        Toast.makeText(RideInformation.this, "Ride was not deleted, try again", Toast.LENGTH_LONG).show();
+    } // end of deleteRide method
+
+    // Method called when Edit Rides button is clicked
+    private void editRide() {
+        // Receive intent from ProfileActivity
+        Intent i = getIntent();
+
+        // Create Ride object selectedRide from intent sent from ProfileActivity
+        Ride selectedRide = (Ride) i.getSerializableExtra("Ride");
+
+        // Get Document reference in Firestore from collection using rideId
+        DocumentReference rideRef = FirebaseFirestore.getInstance()
+                .collection("Rides")
+                .document(selectedRide.getRideId());
+
+        if (!selectedRide.getRequesterEmail().equals(user.getEmail())) {
+            startActivity(new Intent(RideInformation.this, ProfileActivity.class));
+            Toast.makeText(RideInformation.this, "A user can't edit a ride another user posted",
+                    Toast.LENGTH_LONG).show();
+        }
+
+        Intent i2 = new Intent(RideInformation.this, EditRideRequest.class);
+        i2.putExtra("Ride", selectedRide);
+        startActivity(i2);
+
+
+
+    } // end of editRide method
+
+    // Method called when accept button is clicked
     private void acceptRide() {
         // Receive intent from ProfileActivity
         Intent i = getIntent();
-        // Create Ride object selecctedRide from intent sent from ProfileActivity
+
+        // Create Ride object selectedRide from intent sent from ProfileActivity
         Ride selectedRide = (Ride) i.getSerializableExtra("Ride");
 
-        // In this function we need to update the isAccepted and driverEmail field
-        // in document in Rides collection.
-        // After we update those values our refresh buttons will work.
-        selectedRide.setIsAccepted(true);
-        selectedRide.setDriverEmail(user.getEmail());
+        // Get Document reference in Firestore from collection using rideId
+        DocumentReference rideRef = FirebaseFirestore.getInstance()
+                                        .collection("Rides")
+                                        .document(selectedRide.getRideId());
+
+        // Get instance of Current User
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Update the Document references
+        rideRef.update("isAccepted", true);
+        rideRef.update("driverEmail", user.getEmail());
+
+        // If a user tries to accept a ride they posted
+        if (selectedRide.getRequesterEmail().equals(selectedRide.getDriverEmail())) {
+            // Update Documents fields to their default value
+            rideRef.update("isAccepted", false);
+            rideRef.update("driverEmail", "");
+
+            // Create Toast for user showing error
+            Toast.makeText(RideInformation.this, "A requester can't accept a ride they posted",
+                    Toast.LENGTH_LONG).show();
+
+            // Redirect the user back to ProfileActivity
+            startActivity(new Intent(RideInformation.this, ProfileActivity.class));
+        }
+
+        // If requesterEmail and driverEmail are not the same
+        // Return the user to the view with all of the rides they have accepted
+        startActivity(new Intent(RideInformation.this, UserAcceptedRides.class));
+        // Create Toast for user that the Ride has be accepted
+        Toast.makeText(RideInformation.this, "Ride has been accepted!", Toast.LENGTH_LONG).show();
 
     } // end of acceptRide method
 

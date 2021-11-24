@@ -103,32 +103,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         greetingTextView = (TextView) findViewById(R.id.greeting);
         greetingTextView.setText("Hello " + user.getEmail());
 
-//        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                // Create User obj
-//                User userProfile = snapshot.getValue(User.class);
-//
-//                if (userProfile != null) { // User profile exists
-//                    // Get user information from userProfile
-//                    String fullName = userProfile.fullName;
-//                    String email = userProfile.email;
-//                    String age = userProfile.age;
-//
-//                    // Set the Text Views to user profile info
-//                    greetingTextView.setText("Welcome, " + fullName + "!");
-//                    //fullNameTextView.setText(fullName);
-//                    //emailTextView.setText(email);
-//                    //ageTextView.setText(age);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) { // User doesn't exist
-//                Toast.makeText(ProfileActivity.this, "Something bad happened!", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
     }
 
     @Override
