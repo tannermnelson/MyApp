@@ -146,8 +146,8 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
         rideRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                startActivity(new Intent(RideInformation.this, ProfileActivity.class));
                 Toast.makeText(RideInformation.this, "Ride has been deleted", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(RideInformation.this, ProfileActivity.class));
             }
 
         });
@@ -169,16 +169,15 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
                 .document(selectedRide.getRideId());
 
         if (!selectedRide.getRequesterEmail().equals(user.getEmail())) {
-            startActivity(new Intent(RideInformation.this, ProfileActivity.class));
             Toast.makeText(RideInformation.this, "A user can't edit a ride another user posted",
                     Toast.LENGTH_LONG).show();
+            startActivity(new Intent(RideInformation.this, ProfileActivity.class));
         }
-
-        Intent i2 = new Intent(RideInformation.this, EditRideRequest.class);
-        i2.putExtra("Ride", selectedRide);
-        startActivity(i2);
-
-
+        else {
+            Intent i2 = new Intent(RideInformation.this, EditRideRequest.class);
+            i2.putExtra("Ride", selectedRide);
+            startActivity(i2);
+        }
 
     } // end of editRide method
 
@@ -203,7 +202,7 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
         rideRef.update("driverEmail", user.getEmail());
 
         // If a user tries to accept a ride they posted
-        if (selectedRide.getRequesterEmail().equals(selectedRide.getDriverEmail())) {
+        if (selectedRide.getRequesterEmail().equals(user.getEmail())) {
             // Update Documents fields to their default value
             rideRef.update("isAccepted", false);
             rideRef.update("driverEmail", "");
@@ -215,12 +214,13 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
             // Redirect the user back to ProfileActivity
             startActivity(new Intent(RideInformation.this, ProfileActivity.class));
         }
-
         // If requesterEmail and driverEmail are not the same
-        // Return the user to the view with all of the rides they have accepted
-        startActivity(new Intent(RideInformation.this, UserAcceptedRides.class));
-        // Create Toast for user that the Ride has be accepted
-        Toast.makeText(RideInformation.this, "Ride has been accepted!", Toast.LENGTH_LONG).show();
+        else {
+            // Create Toast for user that the Ride has be accepted
+            Toast.makeText(RideInformation.this, "Ride has been accepted!", Toast.LENGTH_LONG).show();
+            // Return the user to the view with all of the rides they have accepted
+            startActivity(new Intent(RideInformation.this, UserAcceptedRides.class));
+        }
 
     } // end of acceptRide method
 

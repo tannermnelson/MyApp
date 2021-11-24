@@ -98,11 +98,11 @@ public class EditRideRequest extends AppCompatActivity implements View.OnClickLi
                 .document(selectedRide.getRideId());
 
         // Update Document reference with new values.
-        rideRef.update("rideDescription", editTextDescription.getText());
-        rideRef.update("rideTime", editTextTime.getText());
-        rideRef.update("pickupLocation", editTextPickupLocation.getText());
-        rideRef.update("destinationLocation", editTextDestinationLocation.getText());
-        rideRef.update("rideTip", editTextRideTip.getText());
+        rideRef.update("rideDescription", editTextDescription.getText().toString());
+        rideRef.update("rideTime", editTextTime.getText().toString());
+        rideRef.update("pickupLocation", editTextPickupLocation.getText().toString());
+        rideRef.update("destinationLocation", editTextDestinationLocation.getText().toString());
+        rideRef.update("rideTip", editTextRideTip.getText().toString());
 
         startActivity(new Intent(EditRideRequest.this, ProfileActivity.class));
         Toast.makeText(EditRideRequest.this, "Ride has been edited successfully!", Toast.LENGTH_LONG).show();
