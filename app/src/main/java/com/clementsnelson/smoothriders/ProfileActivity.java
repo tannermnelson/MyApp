@@ -13,6 +13,8 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,9 +44,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private String userID;
     private TextView greetingTextView;
     private ArrayAdapter<Ride> adapter;
-    private Button logoutButton, createRideButton, ridesPosted, ridesAccepted, refreshButton;
+    private Button logoutButton, createRideButton, ridesPosted, ridesAccepted;
+    private ImageButton refreshButton;
     private static final String RIDE = "Rides";
     private ProgressBar progressBar;
+    private EditText searchByTipField;
 
     private FirebaseFirestore mDbProfile = FirebaseFirestore.getInstance();
 
@@ -84,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ridesPosted = (Button) findViewById(R.id.ridesPosted);
         ridesPosted.setOnClickListener(this);
 
-        refreshButton = (Button) findViewById(R.id.refreshButton);
+        refreshButton = (ImageButton) findViewById(R.id.refreshButton);
         refreshButton.setOnClickListener(this);
 
         // Get logoutButton obj reference
@@ -102,6 +106,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         // Get final obj references to fillable text views
         greetingTextView = (TextView) findViewById(R.id.greeting);
         greetingTextView.setText("Hello " + user.getEmail());
+
+        // Get EditText obj reference
+        searchByTipField = (EditText) findViewById(R.id.searchByTipField);
 
     }
 
@@ -127,10 +134,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                adapter.clear();
                                 ArrayList<Ride> rides = new ArrayList<>();
                                 for(QueryDocumentSnapshot document: queryDocumentSnapshots){
                                     Ride r = document.toObject(Ride.class);
-                                    if (!r.getIsAccepted()) {
+                                    if (!r.getIsAccepted() && searchByTipField.getText().toString().trim().length() == 0) {
                                         // By default rides are created with the isAccepted field
                                         // set to false. When a user accepts the ride we need to
                                         // update that field to true so they don't show up in the
@@ -138,6 +146,23 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                         rides.add(r);
                                         Log.d(RIDE, document.getId() + " =>" + document.getData());
                                     }
+
+                                    // If search field is not blank
+                                    else if (searchByTipField.getText().toString().trim().length() > 0 && !r.getIsAccepted()) {
+                                        String searchFieldTip = searchByTipField.getText().toString();
+                                        double searchTipAmount = Double.parseDouble(searchFieldTip);
+                                        double rideTipAmount = Double.parseDouble(r.getRideTip());
+
+                                        if(searchTipAmount <= rideTipAmount) {
+                                            rides.add(r);
+                                            Log.d(RIDE, document.getId() + " =>" + document.getData());
+//                                            Log.d(RIDE, "Search tip amount: " + searchTipAmount);
+//                                            Log.d(RIDE, "Ride tip amount: " + rideTipAmount);
+
+                                        }
+
+                                    }
+
                                 }
                                 adapter.clear();
                                 adapter.addAll(rides);
