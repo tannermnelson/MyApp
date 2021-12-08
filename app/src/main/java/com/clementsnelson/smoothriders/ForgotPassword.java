@@ -71,7 +71,7 @@ public class ForgotPassword extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                 }
                 else { // if password reset email doesn't work
-                    Toast.makeText(ForgotPassword.this, "Ooops, that didn't work. Try again!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ForgotPassword.this, "Oops, that didn't work. Try again!", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }

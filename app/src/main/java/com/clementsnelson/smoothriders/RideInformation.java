@@ -28,7 +28,7 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
     // Initialize references to objects in Activity file
     private TextView tip, time, rideDescription, driverName, pickupAddress, destination;
     private Button acceptButton, logoutButton, editButton, deleteButton;
-    // Get database refernce from Firebase
+    // Get database reference from Firebase
     private DatabaseReference reference;
     // Initialize userID String for use in Greeting
     private String userID;
@@ -42,7 +42,7 @@ public class RideInformation extends AppCompatActivity implements View.OnClickLi
 
         // Receive intent from ProfileActivity
         Intent i = getIntent();
-        // Create Ride object selecctedRide from intent sent from ProfileActivity
+        // Create Ride object selectedRide from intent sent from ProfileActivity
         Ride selectedRide = (Ride) i.getSerializableExtra("Ride");
 
         // Get string values from selectedRide to input into label TextViews

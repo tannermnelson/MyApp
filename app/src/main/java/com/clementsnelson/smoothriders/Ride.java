@@ -48,7 +48,7 @@ public class Ride implements Serializable {
 
     @NonNull
     @Override
-    // Overide default toString method for use in ListView adapter
+    // Override default toString method for use in ListView adapter
     public String toString() {
         return this.requesterEmail + " is requesting a ride from " + this.pickupLocation + " to " +
                 this.destinationLocation + " at " + this.rideTime + " for $" + this.rideTip + " dollars.";

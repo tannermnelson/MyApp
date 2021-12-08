@@ -32,7 +32,6 @@ public class CreateRideRequest extends AppCompatActivity implements View.OnClick
     private int currentHour,currentMinute;
     private String amPm;
     private TimePickerDialog timePickerDialog;
-    private DocumentReference rideRef;
 
     private FirebaseFirestore mDbb = FirebaseFirestore.getInstance();
 

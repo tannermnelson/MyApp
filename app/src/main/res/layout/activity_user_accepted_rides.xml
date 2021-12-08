@@ -30,7 +30,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/whiteText"
-        android:text="REFRESH YOUR RIDES"
+        android:text="@string/refRides"
         android:textColor="@color/blackText"
         android:textSize="15sp"
         android:textStyle="bold"

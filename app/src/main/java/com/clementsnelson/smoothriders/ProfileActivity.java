@@ -1,15 +1,11 @@
 package com.clementsnelson.smoothriders;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,23 +14,15 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.smoothriders.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -103,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
 
-        // Get final obj references to fillable text views
+        // Get final obj references to empty text views
         greetingTextView = (TextView) findViewById(R.id.greeting);
         greetingTextView.setText("Hello " + user.getEmail());
 

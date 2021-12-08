@@ -1,8 +1,6 @@
 package com.clementsnelson.smoothriders;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,21 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.smoothriders.R;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Calendar;
 
 public class EditRideRequest extends AppCompatActivity implements View.OnClickListener{
     private EditText editTextDescription, editTextTime, editTextPickupLocation, editTextDestinationLocation, editTextRideTip;
     private Button editRideRequestBtn, logoutButtonBtn;
     private ProgressBar progressBar;
-    private Calendar calendar;
-    private int currentHour,currentMinute;
-    private String amPm;
-    private TimePickerDialog timePickerDialog;
     private FirebaseFirestore mDbb = FirebaseFirestore.getInstance();
 
     @Override
